@@ -33,3 +33,21 @@ class AplikasiTkinter:
         self.label_gambar = tk.Label(self.root, image=self.photo, bg="#D9F2F4")
 
         self.label_gambar.pack(pady=10)
+     
+        self.button =tk.Button(
+    self.root,
+    text="Login",
+    command=self.tampilkan_pesan,
+    font=("Poppins", 14),  
+    width=20,                
+    height=2                 
+).pack(pady=10)
+
+        self.button =tk.Button(
+    self.root,
+    text="Register",
+    command=self.tampilkan_pesan,
+    font=("Poppins", 14), 
+    width=20,                
+    height=2                 
+).pack(pady=10)
