@@ -51,3 +51,19 @@ class AplikasiTkinter:
     width=20,                
     height=2                 
 ).pack(pady=10)
+
+self.button = tk.Button(
+    self.root,
+    text="Menu",
+    command=self.tampilkan_pesan,
+    font=("Poppins", 14, ),
+    width=20,                
+    height=2                 
+).pack(pady=10)
+
+    def tampilkan_pesan(self):
+        tk.messagebox.showinfo("Informasi", "Coming Soon!")
+if _name_ == "_main_":
+    root = tk.Tk()
+    app = AplikasiTkinter(root)
+    root.mainloop()
