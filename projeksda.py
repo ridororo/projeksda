@@ -232,3 +232,44 @@ try:
                 name_label = tk.Label(person_frame, text=orang_names[i], font=("Arial", 12), bg=self.content_bg_color)
                 name_label.pack(pady=2)
                 self.current_page_widgets.append(name_label)
+             except FileNotFoundError:
+                print(f"Error: {foto_file} tidak ditemukan. Menampilkan placeholder.")
+                placeholder_label = tk.Label(person_frame, text=f"Foto {i+1}\nTidak Ditemukan", 
+                                                font=("Arial", 10), width=20, height=10, 
+                                                bg="lightgray", fg="red")
+                placeholder_label.pack(pady=5)
+                self.current_page_widgets.append(placeholder_label)
+                
+                name_label = tk.Label(person_frame, text=orang_names[i], font=("Arial", 12), bg=self.content_bg_color)
+                name_label.pack(pady=2)
+                self.current_page_widgets.append(name_label)
+
+        back_button = tk.Button(
+            self.bg_label,
+            text="Kembali ke Home",
+            command=self.show_home_screen,
+            font=("Arial", 12),
+            pady=10,
+            bg=self.button_normal_bg,
+            fg=self.button_text_fg,
+            relief="flat",
+            activebackground=self.button_hover_bg
+        )
+        back_button.pack(pady=20)
+        self.current_page_widgets.append(back_button)
+        self.bind_hover_effects(back_button)
+def on_start_button_click(self):
+        self.show_new_page()
+
+    def on_about_button_click(self):
+        self.show_about_page()
+
+    def on_exit_button_click(self):
+        if messagebox.askyesno("Keluar", "Apakah Anda yakin ingin keluar dari aplikasi?"):
+            self.root.quit()
+
+
+if _name_ == "_main_":
+    root = tk.Tk()
+    app = AplikasiTkinter(root)
+    root.mainloop()
