@@ -150,3 +150,43 @@ self.current_page_widgets = []
         self.exit_button.pack(pady=5)
         self.current_page_widgets.append(self.exit_button)
         self.bind_hover_effects(self.exit_button)
+
+def show_new_page(self):
+        self.clear_current_page()
+
+       
+        if self.photo_background_new_page:
+            self.bg_label.config(image=self.photo_background_new_page)
+        else: 
+            self.bg_label.config(image='', bg=self.content_bg_color)
+
+
+        label_halaman_baru = tk.Label(self.bg_label, text="Ini Halaman Baru!", font=("Arial", 30), bg=self.content_bg_color)
+        label_halaman_baru.pack(expand=True, pady=50)
+        self.current_page_widgets.append(label_halaman_baru)
+
+        back_button = tk.Button(
+            self.bg_label,
+            text="Kembali ke Home",
+            command=self.show_home_screen,
+            font=("Poppins", 12),
+            pady=10,
+            bg=self.button_normal_bg,
+            fg=self.button_text_fg,
+            relief="flat",
+            activebackground=self.button_hover_bg
+        )
+        back_button.pack(pady=20)
+        self.current_page_widgets.append(back_button)
+        self.bind_hover_effects(back_button)
+
+    def show_about_page(self):
+        self.clear_current_page()
+
+        
+        if self.photo_background_default:
+            self.bg_label.config(image=self.photo_background_default)
+        else:
+            self.bg_label.config(image='', bg=self.content_bg_color)
+
+
