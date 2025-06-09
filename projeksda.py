@@ -60,9 +60,46 @@ self.button = tk.Button(
     height=2                 
 ).pack(pady=10)
 
-    def tampilkan_pesan(self):
-        tk.messagebox.showinfo("Informasi", "Coming Soon!")
-if _name_ == "_main_":
-    root = tk.Tk()
-    app = AplikasiTkinter(root)
-    root.mainloop()
+self.current_page_widgets = []
+        self.about_photo_refs = []
+
+        self.button_normal_bg = "#18AEB9"
+        self.button_hover_bg = "#14959E"
+        self.button_text_fg = "white"
+
+        self.show_home_screen()
+
+    def clear_current_page(self):
+        for widget in self.current_page_widgets:
+            if widget.winfo_exists():
+                widget.destroy()
+        self.current_page_widgets.clear()
+        self.about_photo_refs.clear()
+
+    
+    def bind_hover_effects(self, button):
+        button.bind("<Enter>", lambda e: button.config(bg=self.button_hover_bg)) # Saat mouse masuk
+        button.bind("<Leave>", lambda e: button.config(bg=self.button_normal_bg)) # Saat mouse keluar
+
+    def show_home_screen(self):
+        self.clear_current_page()
+
+       
+        if self.photo_background_default:
+            self.bg_label.config(image=self.photo_background_default)
+        else: 
+            self.bg_label.config(image='', bg=self.content_bg_color) 
+            
+        try:
+            img = Image.open("sehun.png")
+            img = img.resize((400, 250), Image.LANCZOS)
+            self.photo = ImageTk.PhotoImage(img)
+            self.label_gambar = tk.Label(self.bg_label, image=self.photo, bg="#D9F2F4") 
+            self.label_gambar.pack(pady=10)
+            self.current_page_widgets.append(self.label_gambar)
+        except FileNotFoundError:
+            print("Error: sehun.png tidak ditemukan.")
+            self.label_gambar = tk.Label(self.bg_label, text="Gambar tidak ditemukan", bg="#D9F2F4")
+            self.label_gambar.pack(pady=10)
+            self.current_page_widgets.append(self.label_gambar)
+
