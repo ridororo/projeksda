@@ -7,21 +7,16 @@ class AplikasiTkinter:
         self.root = root
         self.root.title("Aplikasi Tkinter Sederhana")
         self.root.attributes("-fullscreen", True)
-
-        
-
         self.root.bind("<Escape>", lambda e: self.root.attributes("-fullscreen", False))
 
-        image = Image.open("background.png")
-        self.bg_image = ImageTk.PhotoImage(image)
-        self.bg_label = tk.Label(self.root, image=self.bg_image)
-     
-     self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
+        self.screen_width = self.root.winfo_screenwidth()
+        self.screen_height = self.root.winfo_screenheight()
 
-        self.root.resizable(True, True)
-
-        self.tampilkan_gambar()
- 
+       
+        self.photo_background_default = None
+        self.photo_background_new_page = None 
+        self.default_bg_path = "background.png"
+        self.new_page_bg_path = "bg2.png"        
 
     def tampilkan_gambar(self):
         img = Image.open("sehun.png") 
