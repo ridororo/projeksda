@@ -189,4 +189,18 @@ def show_new_page(self):
         else:
             self.bg_label.config(image='', bg=self.content_bg_color)
 
+about_title_label = tk.Label(self.bg_label, text="About Us", font=("Basketball", 30,), bg=self.content_bg_color)
+        about_title_label.pack(pady=20)
+        self.current_page_widgets.append(about_title_label)
 
+        photos_container = tk.Frame(self.bg_label, bg=self.content_bg_color) 
+        photos_container.pack(pady=10)
+        self.current_page_widgets.append(photos_container)
+
+        foto_files = ["foto1.png", "foto2.png", "foto3.png", "foto4.png"]
+        orang_names = ["Filuth Ridho Aji", "peri", "jahira", "talita"]
+
+        for i, foto_file in enumerate(foto_files):
+            person_frame = tk.Frame(photos_container, bg="white") 
+            person_frame.pack(side=tk.LEFT, padx=5, pady=10)
+            self.current_page_widgets.append(person_frame)
