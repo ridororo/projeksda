@@ -204,3 +204,31 @@ about_title_label = tk.Label(self.bg_label, text="About Us", font=("Basketball",
             person_frame = tk.Frame(photos_container, bg="white") 
             person_frame.pack(side=tk.LEFT, padx=5, pady=10)
             self.current_page_widgets.append(person_frame)
+
+try:
+                img_path = foto_file
+                img_pil = Image.open(img_path)
+                img_pil = img_pil.resize((180, 210), Image.LANCZOS)
+                
+                photo_tk = ImageTk.PhotoImage(img_pil)
+                self.about_photo_refs.append(photo_tk)
+
+                photo_label = tk.Label(person_frame, image=photo_tk, bg=self.content_bg_color)
+                photo_label.pack(pady=5)
+                self.current_page_widgets.append(photo_label)
+
+                name_label = tk.Label(person_frame, text=orang_names[i], font=("Basketball", 14), fg="white", bg="black")
+                name_label.pack(pady=2)
+                self.current_page_widgets.append(name_label)
+
+            except FileNotFoundError:
+                print(f"Error: {foto_file} tidak ditemukan. Menampilkan placeholder.")
+                placeholder_label = tk.Label(person_frame, text=f"Foto {i+1}\nTidak Ditemukan", 
+                                                font=("Arial", 10), width=20, height=10, 
+                                                bg="lightgray", fg="red")
+                placeholder_label.pack(pady=5)
+                self.current_page_widgets.append(placeholder_label)
+                
+                name_label = tk.Label(person_frame, text=orang_names[i], font=("Arial", 12), bg=self.content_bg_color)
+                name_label.pack(pady=2)
+                self.current_page_widgets.append(name_label)
