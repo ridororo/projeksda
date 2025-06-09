@@ -102,4 +102,51 @@ self.current_page_widgets = []
             self.label_gambar = tk.Label(self.bg_label, text="Gambar tidak ditemukan", bg="#D9F2F4")
             self.label_gambar.pack(pady=10)
             self.current_page_widgets.append(self.label_gambar)
+         
+            self.start_button = tk.Button(
+            self.bg_label,
+            text="Start",
+            command=self.on_start_button_click,
+            font=("Basketball", 14),
+            width=20,
+            height=2,
+            bg=self.button_normal_bg, 
+            fg=self.button_text_fg,   
+            relief="flat",           
+            activebackground=self.button_hover_bg 
+        )
+        self.start_button.pack(pady=5)
+        self.current_page_widgets.append(self.start_button)
+        self.bind_hover_effects(self.start_button)
 
+        self.about_button = tk.Button(
+            self.bg_label,
+            text="About",
+            command=self.on_about_button_click,
+            font=("Basketball", 14),
+            width=20,
+            height=2,
+            bg=self.button_normal_bg,
+            fg=self.button_text_fg,
+            relief="flat",
+            activebackground=self.button_hover_bg
+        )
+        self.about_button.pack(pady=5)
+        self.current_page_widgets.append(self.about_button)
+        self.bind_hover_effects(self.about_button)
+
+        self.exit_button = tk.Button(
+            self.bg_label,
+            text="Exit",
+            command=self.on_exit_button_click,
+            font=("Basketball", 14),
+            width=20,
+            height=2,
+            bg=self.button_normal_bg,
+            fg=self.button_text_fg,
+            relief="flat",
+            activebackground=self.button_hover_bg
+        )
+        self.exit_button.pack(pady=5)
+        self.current_page_widgets.append(self.exit_button)
+        self.bind_hover_effects(self.exit_button)
