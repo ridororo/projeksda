@@ -205,46 +205,67 @@ class AplikasiTkinter:
     def show_home_screen(self):
         self.clear_current_page()
 
+        btn_input_biru = tk.Button(
+            self.bg_label,
+            text="Input Peserta Biru",
+            command=lambda: self.show_input_peserta_page("biru"),
+            font=("Poppins", 12),
+            bg=self.button_normal_bg,
+            fg=self.button_text_fg
+        )
+        btn_input_biru.pack(pady=5)
+        self.current_page_widgets.append(btn_input_biru)
+
+        btn_input_merah = tk.Button(
+            self.bg_label,
+            text="Input Peserta Merah",
+            command=lambda: self.show_input_peserta_page("merah"),
+            font=("Poppins", 12),
+            bg=self.button_normal_bg,
+            fg=self.button_text_fg
+        )
+        btn_input_merah.pack(pady=5)
+        self.current_page_widgets.append(btn_input_merah)
+
        
         if self.photo_background_default:
             self.bg_label.config(image=self.photo_background_default)
         else: 
             self.bg_label.config(image='', bg=self.content_bg_color) 
-            
+ 
         try:
-            img = Image.open("sehun.png")
-            img = img.resize((400, 250), Image.LANCZOS)
+            img = Image.open("sehun.png").resize((400, 250), Image.LANCZOS)
             self.photo = ImageTk.PhotoImage(img)
-            self.label_gambar = tk.Label(self.bg_label, image=self.photo, bg="#D9F2F4") 
-            self.label_gambar.pack(pady=10)
-            self.current_page_widgets.append(self.label_gambar)
+            label_gambar = tk.Label(self.bg_label, image=self.photo, bg=self.content_bg_color)
         except FileNotFoundError:
             print("Error: sehun.png tidak ditemukan.")
-            self.label_gambar = tk.Label(self.bg_label, text="Gambar tidak ditemukan", bg="#D9F2F4")
-            self.label_gambar.pack(pady=10)
-            self.current_page_widgets.append(self.label_gambar)
-         
-            self.start_button = tk.Button(
+            label_gambar = tk.Label(self.bg_label, text="Gambar tidak ditemukan", bg=self.content_bg_color)
+
+    
+        label_gambar.pack(pady=10)
+        self.current_page_widgets.append(label_gambar)
+
+        start_button = tk.Button(
             self.bg_label,
             text="Start",
             command=self.on_start_button_click,
-            font=("Basketball", 14),
+            font=("Poppins", 14),
             width=20,
             height=2,
-            bg=self.button_normal_bg, 
-            fg=self.button_text_fg,   
-            relief="flat",           
-            activebackground=self.button_hover_bg 
+            bg=self.button_normal_bg,
+            fg=self.button_text_fg,
+            relief="flat",
+            activebackground=self.button_hover_bg
         )
-        self.start_button.pack(pady=5)
-        self.current_page_widgets.append(self.start_button)
-        self.bind_hover_effects(self.start_button)
+        start_button.pack(pady=5)
+        self.current_page_widgets.append(start_button)
+        self.bind_hover_effects(start_button)
 
-        self.about_button = tk.Button(
+        about_button = tk.Button(
             self.bg_label,
             text="About",
             command=self.on_about_button_click,
-            font=("Basketball", 14),
+            font=("Poppins", 14),
             width=20,
             height=2,
             bg=self.button_normal_bg,
@@ -252,15 +273,15 @@ class AplikasiTkinter:
             relief="flat",
             activebackground=self.button_hover_bg
         )
-        self.about_button.pack(pady=5)
-        self.current_page_widgets.append(self.about_button)
-        self.bind_hover_effects(self.about_button)
+        about_button.pack(pady=5)
+        self.current_page_widgets.append(about_button)
+        self.bind_hover_effects(about_button)
 
-        self.exit_button = tk.Button(
+        exit_button = tk.Button(
             self.bg_label,
             text="Exit",
             command=self.on_exit_button_click,
-            font=("Basketball", 14),
+            font=("Poppins", 14),
             width=20,
             height=2,
             bg=self.button_normal_bg,
@@ -268,10 +289,23 @@ class AplikasiTkinter:
             relief="flat",
             activebackground=self.button_hover_bg
         )
-        self.exit_button.pack(pady=5)
-        self.current_page_widgets.append(self.exit_button)
-        self.bind_hover_effects(self.exit_button)
+        exit_button.pack(pady=5)
+        self.current_page_widgets.append(exit_button)
+        self.bind_hover_effects(exit_button)
+    def reset_kedua_stopwatch(self):
+        reset_kiri()
+        reset_kanan()
 
+    def load_peserta_dari_csv(self, path):
+        data = []
+        try:
+            with open(path, newline='', encoding='utf-8') as file:
+                reader = csv.DictReader(file)
+                for row in reader:
+                    data.append(row)
+        except FileNotFoundError:
+            print(f"File {path} tidak ditemukan.")
+        return data
 def show_new_page(self):
         self.clear_current_page()
 
@@ -347,6 +381,49 @@ def show_new_page(self):
         font=("Helvetica", 16), width=12, bg="#2196F3", fg="white")
         tombol_reset.place(x=1300, y=730)
         self.current_page_widgets.append(tombol_reset)
+                # === FRAME UNTUK SKOR DI TENGAH ===
+        skor_frame2 = tk.Frame(self.bg_label, bg="#5271ff")
+        skor_frame2.place(x=50, y=110, width=300, height=300)
+        self.current_page_widgets.append(skor_frame2)
+
+        self.skor2 = tk.IntVar(value=0)
+
+        def tambah2():
+            self.skor2.set(self.skor2.get() + 1)
+
+        def kurang2():
+            self.skor2.set(self.skor2.get() - 1)
+
+        label = tk.Label(skor_frame2, textvariable=self.skor2, font=("Helvetica", 128), bg="#5271ff")
+        label.place(x=10, y=50)
+
+        tombol_tambah = tk.Button(skor_frame2, text="+1", font=("Helvetica", 24), width=5, bg="#5271ff",command=tambah2)
+        tombol_tambah.place(x=0, y=230)
+
+        tombol_kurang = tk.Button(skor_frame2, text="-1", font=("Helvetica", 24), width=5, bg="#5271ff", command=kurang2)
+        tombol_kurang.place(x=150, y=230)
+
+       
+        skor_frame = tk.Frame(self.bg_label, bg="#ff3131")
+        skor_frame.place(x=900, y=110, width=300, height=300)
+        self.current_page_widgets.append(skor_frame)
+
+        self.skor = tk.IntVar(value=0)
+
+        def tambah():
+            self.skor.set(self.skor.get() + 1)
+
+        def kurang():
+            self.skor.set(self.skor.get() - 1)
+
+        label = tk.Label(skor_frame, textvariable=self.skor, font=("Helvetica", 128), bg="#ff3131")
+        label.place(x=10, y=50)
+
+        tombol_tambah = tk.Button(skor_frame, text="+1", font=("Helvetica", 24), width=5, bg="#ff3131",command=tambah)
+        tombol_tambah.place(x=0, y=230)
+
+        tombol_kurang = tk.Button(skor_frame, text="-1", font=("Helvetica", 24), width=5, bg="#ff3131", command=kurang)
+        tombol_kurang.place(x=150, y=230)
 
 
         back_button = tk.Button(
