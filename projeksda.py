@@ -425,6 +425,36 @@ def show_new_page(self):
         tombol_kurang = tk.Button(skor_frame, text="-1", font=("Helvetica", 24), width=5, bg="#ff3131", command=kurang)
         tombol_kurang.place(x=150, y=230)
 
+            def sikaku1():
+            messagebox.showinfo("info","Biru di diskualifikasi!")
+        
+        def kiken1():
+            messagebox.showinfo("info", "Biru telah menyerah!")
+
+        
+        tombolkiken1 = tk.Button(self.bg_label, text="Kikken",font=("Helvetica", 16), command=kiken1, bg="green", fg="white")
+        tombolkiken1.place(x=550, y=730, width=100, height=40)
+        self.current_page_widgets.append(tombolkiken1)
+
+        tombolsikaku1 = tk.Button(self.bg_label, text="Shikkaku",font=("Helvetica", 16), command=sikaku1, bg="green", fg="white")
+        tombolsikaku1.place(x=400, y=730, width=100, height=40)
+        self.current_page_widgets.append(tombolsikaku1)
+
+        def sikaku2():
+            messagebox.showinfo("info","Merah di diskualifikasi!")
+        
+        def kiken2():
+            messagebox.showinfo("info", "Merah telah menyerah!")
+
+        
+        tombolkiken2 = tk.Button(root, text="Kikken",font=("Helvetica", 16), command=kiken2, bg="green", fg="white")
+        tombolkiken2.place(x=1050, y=730, width=100, height=40)
+        self.current_page_widgets.append(tombolkiken2)
+
+        tombolsikaku2 = tk.Button(root, text="Shikkaku",font=("Helvetica", 16), command=sikaku2, bg="green", fg="white")
+        tombolsikaku2.place(x=900, y=730, width=100, height=40)
+        self.current_page_widgets.append(tombolsikaku2)
+        
 
         back_button = tk.Button(
             self.bg_label,
@@ -440,6 +470,33 @@ def show_new_page(self):
         back_button.pack(pady=20)
         self.current_page_widgets.append(back_button)
         self.bind_hover_effects(back_button)
+
+        # === PESERTA BIRU ===
+        peserta_biru = self.load_peserta_dari_csv("peserta_biru.csv")
+        peserta_biru_frame = tk.Frame(self.bg_label, bg="#5271ff")
+        peserta_biru_frame.place(x=50, y=420)  # posisi bisa diatur
+        self.current_page_widgets.append(peserta_biru_frame)
+
+        judul_biru = tk.Label(peserta_biru_frame, text="Peserta Biru", font=("Helvetica", 14, "bold"), bg="#5271ff", fg="white")
+        judul_biru.pack()
+
+        for p in peserta_biru:
+            label_peserta = tk.Label(peserta_biru_frame, text=f"{p['Nama']} - {p['Asal']}", bg="#5271ff", fg="white", font=("Helvetica", 10))
+            label_peserta.pack(side=tk.RIGHT, padx=20)
+        print(p)
+
+        # === PESERTA MERAH ===
+        peserta_merah = self.load_peserta_dari_csv("peserta_merah.csv")
+        peserta_merah_frame = tk.Frame(self.bg_label, bg="#ff3131")
+        peserta_merah_frame.place(x=1250, y=420)
+        self.current_page_widgets.append(peserta_merah_frame)
+
+        judul_merah = tk.Label(peserta_merah_frame, text="Peserta Merah", font=("Helvetica", 14, "bold"), bg="#ff3131", fg="white")
+        judul_merah.pack()
+       
+        for p in peserta_merah:
+            label_peserta = tk.Label(peserta_merah_frame, text=f"{p['Nama']} - {p['Asal']}", bg="#ff3131", fg="white", font=("Helvetica", 10))
+            label_peserta.pack(side=tk.LEFT, padx=20)
 
     def show_about_page(self):
         self.clear_current_page()
