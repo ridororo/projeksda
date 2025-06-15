@@ -1,6 +1,79 @@
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
+import csv
+import os
+
+waktu_kiri = 0
+running_kiri = False
+label_kiri = None
+
+waktu_kanan = 0
+running_kanan = False
+label_kanan = None
+
+def update_kiri():
+    global waktu_kiri, running_kiri, label_kiri
+    if running_kiri:
+        waktu_kiri += 1
+        menit = (waktu_kiri % 3600) // 60
+        detik = waktu_kiri % 60
+        label_kiri.config(text=f"{menit:02}:{detik:02}")
+        label_kiri.after(1000, update_kiri)
+
+def mulai_kiri():
+    global running_kiri
+    if not running_kiri:
+        running_kiri = True
+        update_kiri()
+
+def stop_kiri():
+    global running_kiri
+    running_kiri = False
+
+def reset_kiri():
+    global running_kiri, waktu_kiri
+    running_kiri = False
+    waktu_kiri = 0
+    label_kiri.config(text="00:00")
+
+def update_kanan():
+    global waktu_kanan, running_kanan, label_kanan
+    if running_kanan:
+        waktu_kanan += 1
+        menit = (waktu_kanan % 3600) // 60
+        detik = waktu_kanan % 60
+        label_kanan.config(text=f"{menit:02}:{detik:02}")
+        label_kanan.after(1000, update_kanan)
+
+def mulai_kanan():
+    global running_kanan
+    if not running_kanan:
+        running_kanan = True
+        update_kanan()
+
+def stop_kanan():
+    global running_kanan
+    running_kanan = False
+
+def reset_kanan():
+    global running_kanan, waktu_kanan
+    running_kanan = False
+    waktu_kanan = 0
+    label_kanan.config(text="00:00")
+
+def mulai_kedua():
+    mulai_kiri()
+    mulai_kanan()
+
+def stop_kedua():
+    stop_kiri()
+    stop_kanan()
+
+def reset_kedua():
+    reset_kiri()
+    reset_kanan()
+
  
 class AplikasiTkinter:
     def __init__(self, root):
@@ -159,11 +232,74 @@ def show_new_page(self):
             self.bg_label.config(image=self.photo_background_new_page)
         else: 
             self.bg_label.config(image='', bg=self.content_bg_color)
+         
+        foto_bendera = "bendera_merah.png"
+        foto_bendera2 = "bendera_biru.png"
+       
+        try:
+            img1 = Image.open("bendera_biru.png").resize((240, 270), Image.LANCZOS)
+            foto1 = ImageTk.PhotoImage(img1)
+            self.about_photo_refs.append(foto1)
+
+            label1 = tk.Label(self.bg_label, image=foto1, bg=self.content_bg_color)
+            label1.place(x=440, y=150)  
+            self.current_page_widgets.append(label1)
+        except FileNotFoundError:
+            print("Error: bendera_biru.png tidak ditemukan.")
+            label1 = tk.Label(self.bg_label, text="bendera_biru.png tidak ditemukan", bg=self.content_bg_color)
+            label1.place(x=100, y=250)
+            self.current_page_widgets.append(label1)
 
 
-        label_halaman_baru = tk.Label(self.bg_label, text="Ini Halaman Baru!", font=("Arial", 30), bg=self.content_bg_color)
-        label_halaman_baru.pack(expand=True, pady=50)
-        self.current_page_widgets.append(label_halaman_baru)
+        try:
+            img2 = Image.open("bendera_merah.png").resize((240, 270), Image.LANCZOS)
+            foto2 = ImageTk.PhotoImage(img2)
+            self.about_photo_refs.append(foto2)
+
+            label2 = tk.Label(self.bg_label, image=foto2, bg=self.content_bg_color)
+            label2.place(x=1220, y=150)  
+            self.current_page_widgets.append(label2)
+        except FileNotFoundError:
+            print("Error: bendera_merah.png tidak ditemukan.")
+            label2 = tk.Label(self.bg_label, text="bendera_merah.png tidak ditemukan", bg=self.content_bg_color)
+            label2.place(x=100, y=250)
+            self.current_page_widgets.append(label2)
+
+
+        frame_kiri = tk.Frame(self.bg_label, bg="#5271ff")
+        frame_kiri.place(x=350, y=500, width=400, height=300)
+        self.current_page_widgets.append(frame_kiri)
+
+        global label_kiri
+        label_kiri = tk.Label(frame_kiri, text="00:00", font=("Helvetica", 70), bg="#5271ff", fg="white")
+        label_kiri.pack(pady=20)
+
+
+        frame_kanan = tk.Frame(self.bg_label, bg="#ff3131")
+        frame_kanan.place(x=1150, y=500, width=400, height=300)
+        self.current_page_widgets.append(frame_kanan)
+
+        global label_kanan
+        label_kanan = tk.Label(frame_kanan, text="00:00", font=("Helvetica", 70), bg="#ff3131", fg="white")
+        label_kanan.pack(pady=20)
+    
+
+        tombol_mulai = tk.Button( text="Start", font=("Helvetica", 16), width=12, bg="#5bff52", fg="white", command=mulai_kedua)
+        tombol_mulai.place(x=100, y=565)
+        self.current_page_widgets.append(tombol_mulai)
+
+
+        tombol_stop = tk.Button( text="Stop", command=stop_kedua,
+        font=("Helvetica", 16), width=12, bg="#f44336", fg="white")
+        tombol_stop.place(x=691, y=730)
+        self.current_page_widgets.append(tombol_stop)
+
+
+        tombol_reset = tk.Button( text="Reset", command=reset_kedua,
+        font=("Helvetica", 16), width=12, bg="#2196F3", fg="white")
+        tombol_reset.place(x=1300, y=730)
+        self.current_page_widgets.append(tombol_reset)
+
 
         back_button = tk.Button(
             self.bg_label,
