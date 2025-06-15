@@ -76,64 +76,112 @@ def reset_kedua():
 
  
 class AplikasiTkinter:
+
+    def show_input_peserta_page(self, tim="biru"):
+        self.clear_current_page()
+
+        frame_input = tk.Frame(self.bg_label, bg="white")
+        frame_input.place(relx=0.5, rely=0.5, anchor="center")
+        self.current_page_widgets.append(frame_input)
+
+        label_judul = tk.Label(frame_input, text=f"Input Peserta Tim {tim.capitalize()}", font=("Helvetica", 16, "bold"), bg="white")
+        label_judul.pack(pady=10)
+
+        tk.Label(frame_input, text="Nama:", font=("Helvetica", 12), bg="white").pack()
+        self.entry_nama = tk.Entry(frame_input, font=("Helvetica", 12))
+        self.entry_nama.pack(pady=5)
+
+        tk.Label(frame_input, text="Asal:", font=("Helvetica", 12), bg="white").pack()
+        self.entry_asal = tk.Entry(frame_input, font=("Helvetica", 12))
+        self.entry_asal.pack(pady=5)
+
+        btn_simpan = tk.Button(
+            frame_input,
+            text="Simpan",
+            font=("Helvetica", 12),
+            bg="#18AEB9",
+            fg="white",
+            command=lambda: self.simpan_peserta_csv(tim)
+        )
+        btn_simpan.pack(pady=10)
+
+        btn_kembali = tk.Button(
+            frame_input,
+            text="Kembali",
+            font=("Helvetica", 12),
+            command=self.show_home_screen
+        )
+        btn_kembali.pack()
+
+    def simpan_peserta_csv(self, tim):
+        nama = self.entry_nama.get()
+        asal = self.entry_asal.get()
+
+        if not nama or not asal:
+            messagebox.showwarning("Peringatan", "Nama dan Asal harus diisi.")
+            return
+
+        nama_file = f"peserta_{tim.lower()}.csv"
+        file_baru = not os.path.isfile(nama_file)
+
+        try:
+            with open(nama_file, "a", newline='', encoding="utf-8") as f:
+                writer = csv.writer(f)
+                if file_baru:
+                    writer.writerow(["Nama", "Asal"])
+                writer.writerow([nama, asal])
+            
+            messagebox.showinfo("Sukses", f"Data '{nama}' berhasil disimpan ke tim {tim.capitalize()}!")
+
+            self.entry_nama.delete(0, tk.END)
+            self.entry_asal.delete(0, tk.END)
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Gagal menyimpan data: {e}")
+
+
+
+
+
     def __init__(self, root):
         self.root = root
-        self.root.title("Aplikasi Tkinter Sederhana")
+
         self.root.attributes("-fullscreen", True)
         self.root.bind("<Escape>", lambda e: self.root.attributes("-fullscreen", False))
 
         self.screen_width = self.root.winfo_screenwidth()
         self.screen_height = self.root.winfo_screenheight()
 
-       
-        self.photo_background_default = None
-        self.photo_background_new_page = None 
         self.default_bg_path = "background.png"
-        self.new_page_bg_path = "bg2.png"        
+        self.new_page_bg_path = "terbaru2.png"
 
-   try:
-            
-            original_bg_image_pil = Image.open(self.default_bg_path)
-            resized_bg_image_pil = original_bg_image_pil.resize((self.screen_width, self.screen_height), Image.LANCZOS)
-            self.photo_background_default = ImageTk.PhotoImage(resized_bg_image_pil)
-            
-           
-            original_new_page_bg_pil = Image.open(self.new_page_bg_path)
-            resized_new_page_bg_pil = original_new_page_bg_pil.resize((self.screen_width, self.screen_height), Image.LANCZOS)
-            self.photo_background_new_page = ImageTk.PhotoImage(resized_new_page_bg_pil)
 
-            self.bg_label = tk.Label(self.root, image=self.photo_background_default) 
+
+        self.photo_background_default = None
+        self.photo_background_new_page = None
+        self.content_bg_color = "#D9F2F4"
+
+        try:
+            bg_image = Image.open(self.default_bg_path).resize(
+                (self.screen_width, self.screen_height), Image.LANCZOS
+            )
+            self.photo_background_default = ImageTk.PhotoImage(bg_image)
+
+            new_bg_image = Image.open(self.new_page_bg_path).resize(
+                (self.screen_width, self.screen_height), Image.LANCZOS
+            )
+            self.photo_background_new_page = ImageTk.PhotoImage(new_bg_image)
+
+            self.bg_label = tk.Label(self.root, image=self.photo_background_default)
             self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
-            self.content_bg_color = "#D9F2F4" 
-    
+
         except FileNotFoundError as e:
-            print(f"Error: File background tidak ditemukan ({e}). Menggunakan warna latar belakang default.")
-            self.content_bg_color = "#D9F2F4" 
+            print(f"Error: {e}")
             self.root.configure(bg=self.content_bg_color)
             self.bg_label = tk.Label(self.root, bg=self.content_bg_color)
             self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
-            self.photo_background_default = None 
-            self.photo_background_new_page = None
 
-        self.button =tk.Button(
-    self.root,
-    text="Register",
-    command=self.tampilkan_pesan,
-    font=("Poppins", 14), 
-    width=20,                
-    height=2                 
-).pack(pady=10)
-
-self.button = tk.Button(
-    self.root,
-    text="Menu",
-    command=self.tampilkan_pesan,
-    font=("Poppins", 14, ),
-    width=20,                
-    height=2                 
-).pack(pady=10)
-
-self.current_page_widgets = []
+        self.current_page_widgets = []
         self.about_photo_refs = []
 
         self.button_normal_bg = "#18AEB9"
@@ -149,10 +197,10 @@ self.current_page_widgets = []
         self.current_page_widgets.clear()
         self.about_photo_refs.clear()
 
-    
     def bind_hover_effects(self, button):
-        button.bind("<Enter>", lambda e: button.config(bg=self.button_hover_bg)) # Saat mouse masuk
-        button.bind("<Leave>", lambda e: button.config(bg=self.button_normal_bg)) # Saat mouse keluar
+        button.bind("<Enter>", lambda e: button.config(bg=self.button_hover_bg))
+        button.bind("<Leave>", lambda e: button.config(bg=self.button_normal_bg))
+
 
     def show_home_screen(self):
         self.clear_current_page()
